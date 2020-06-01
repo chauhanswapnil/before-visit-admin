@@ -9,92 +9,102 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
-import {withRouter, Route} from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 
+import FirebaseApp from '../Firebase/base';
+
+var db = FirebaseApp.firestore();
 
 const useStyles = makeStyles({
-  root: {
-    width: '100%',
-  },
-  container: {
-    maxHeight: 440,
-  },
+	root      : {
+		width : '100%'
+	},
+	container : {
+		maxHeight : 440
+	}
 });
 
 const ReviewsTable = (props) => {
+	const handleClick = (row, column, event) => {
+		console.log('Clicked Row', row, column, event);
+	};
 
-    const handleClick = (row,column,event) => {
-      console.log("Clicked Row",row, column, event);
-    }
+	const { rows, columns, history } = props;
+	const classes = useStyles();
+	const [ page, setPage ] = React.useState(0);
+	const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
 
-    const {rows, columns, history} = props;
-    const classes = useStyles();
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(+event.target.value);
+		setPage(0);
+	};
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
-  return (
-    <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-              return (
-                <TableRow hover role="checkbox" 
-                    tabIndex={-1} 
-                    key={row.code} 
-                    // onClick= { () => 
-                    //   {
-                    //     history.push(`/categories/${row.doc_id}`) 
-                    //   }
-                    // } 
-                  >
-                  {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                        <TableCell key={column.id} 
-                            align={column.align}
-                            >
-                            {column.format && typeof value === 'number' ? column.format(value) : value}
-                        </TableCell>
-                        );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[1,10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
-  );
-}
+	return (
+		<Paper className={classes.root}>
+			<TableContainer className={classes.container}>
+				<Table stickyHeader aria-label="sticky table">
+					<TableHead>
+						<TableRow>
+							{columns.map((column) => (
+								<TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+									{column.label}
+								</TableCell>
+							))}
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+							return (
+								<TableRow
+									hover
+									role="checkbox"
+									tabIndex={-1}
+									key={row.code}
+									onClick={() => {
+										if (window.confirm('Are you sure you want to delete the review?')) {
+											db
+												.collection('ratings_and_reviews')
+												.doc(row.docid)
+												.delete()
+												.then()
+												.catch((error) => {
+													alert(error);
+												});
+										}
+										else {
+										}
+									}}>
+									{columns.map((column) => {
+										const value = row[column.id];
+										return (
+											<TableCell key={column.id} align={column.align}>
+												{column.format && typeof value === 'number' ? (
+													column.format(value)
+												) : (
+													value
+												)}
+											</TableCell>
+										);
+									})}
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
+			</TableContainer>
+			<TablePagination
+				rowsPerPageOptions={[ 1, 10, 25, 100 ]}
+				component="div"
+				count={rows.length}
+				rowsPerPage={rowsPerPage}
+				page={page}
+				onChangePage={handleChangePage}
+				onChangeRowsPerPage={handleChangeRowsPerPage}
+			/>
+		</Paper>
+	);
+};
 export default withRouter(ReviewsTable);
