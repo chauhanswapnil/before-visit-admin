@@ -26,6 +26,7 @@ import AddPlaces from '../Places/AddPlaces';
 import PlacesDetail from '../Places/PlacesDetail';
 import AddFaq from '../Faq/AddFaq';
 import FaqDetail from '../Faq/FaqDetail';
+import ImageGallery from '../Places/ImageGallery';
 
 const App = () => {
     return (
@@ -33,27 +34,28 @@ const App = () => {
             <Router>
                 <div>
                     <Switch>
-                        {/* <PrivateRoute path={ROUTES.HOME} exact component={HomePage} /> */}
+                        <PrivateRoute path={ROUTES.HOME} exact component={HomePage} />
                         <Route path={ROUTES.SIGN_IN} exact component={SignInPage} />
-                        <Route path={ROUTES.ACCOUNT} exact component={AccountPage} />
-                        <Route path={ROUTES.HOME} exact component={HomePage} />
-                        <Route path={ROUTES.USERS} exact component={UsersPage} />
-                        <Route path={ROUTES.PLACES} exact component={PlacesPage} />
-                        <Route path={ROUTES.PLACES_ADD} exact component={AddPlaces} />
-                        <Route path={`${ROUTES.PLACES}/:id`} exact component={PlacesDetail} />
-                        <Route path={ROUTES.CATEGORIES} exact component={CategoriesPage} />
-                        <Route path={ROUTES.INTERESTS} exact component={InterestsPage} />
-                        <Route path={ROUTES.REVIEWS} exact component={ReviewsPage} />
-                        <Route path={ROUTES.REQUESTS} exact component={RequestsPage} />
-                        <Route path={ROUTES.FEEDBACK} exact component={FeedbackPage} />
-                        <Route path={ROUTES.ISSUES} exact component={IssuesPage} />
-                        <Route path={ROUTES.FAQ} exact component={FaqPage} />
-                        <Route path={ROUTES.FAQ_ADD} exact component={AddFaq} />
-                        <Route path={`${ROUTES.FAQ}/:id`} exact component={FaqDetail} />
-                        <Route path={ROUTES.ABOUTUS} exact component={AboutusPage} />
-                        <Route path={`${ROUTES.INTERESTS}/:id`} exact component={InterestsDetail}/>
-                        <Route path={ROUTES.CATEGORIES_ADD} exact component={AddCategoryPage} />
-                        <Route path={`${ROUTES.CATEGORIES}/:id`} exact component={CategoryDetail}/>
+                        <PrivateRoute path={ROUTES.ACCOUNT} exact component={AccountPage} />
+                        <PrivateRoute path={ROUTES.HOME} exact component={HomePage} />
+                        <PrivateRoute path={ROUTES.USERS} exact component={UsersPage} />
+                        <PrivateRoute path={ROUTES.PLACES} exact component={PlacesPage} />
+                        <PrivateRoute path={ROUTES.PLACES_ADD} exact component={AddPlaces} />
+                        <PrivateRoute path={ROUTES.PLACES_IMAGES} exact component={ImageGallery} />
+                        <PrivateRoute path={`${ROUTES.PLACES}/:id`} exact component={PlacesDetail} />
+                        <PrivateRoute path={ROUTES.CATEGORIES} exact component={CategoriesPage} />
+                        <PrivateRoute path={ROUTES.INTERESTS} exact component={InterestsPage} />
+                        <PrivateRoute path={ROUTES.REVIEWS} exact component={ReviewsPage} />
+                        <PrivateRoute path={ROUTES.REQUESTS} exact component={RequestsPage} />
+                        <PrivateRoute path={ROUTES.FEEDBACK} exact component={FeedbackPage} />
+                        <PrivateRoute path={ROUTES.ISSUES} exact component={IssuesPage} />
+                        <PrivateRoute path={ROUTES.FAQ} exact component={FaqPage} />
+                        <PrivateRoute path={ROUTES.FAQ_ADD} exact component={AddFaq} />
+                        <PrivateRoute path={`${ROUTES.FAQ}/:id`} exact component={FaqDetail} />
+                        <PrivateRoute path={ROUTES.ABOUTUS} exact component={AboutusPage} />
+                        <PrivateRoute path={`${ROUTES.INTERESTS}/:id`} exact component={InterestsDetail}/>
+                        <PrivateRoute path={ROUTES.CATEGORIES_ADD} exact component={AddCategoryPage} />
+                        <PrivateRoute path={`${ROUTES.CATEGORIES}/:id`} exact component={CategoryDetail}/>
                     </Switch>
                 </div>
             </Router>

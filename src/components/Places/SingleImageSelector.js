@@ -1,9 +1,9 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./add-places.css";
 
 const SingleImageSelector = (props) => {
 
-    const [file, setFile] = useState(props.imageFile);
+    const [file, setFile] = useState(null);
 
     const uploadSingleFile = (e) => {
         setFile(URL.createObjectURL(e.target.files[0]));
@@ -13,7 +13,7 @@ const SingleImageSelector = (props) => {
     return (
         <div>
             <div className="form-group preview">
-                {file ? <img className="img-border" src={file} key={Date.now()} alt='' /> : ''}
+                {file ? <img className="img-border" src={file} alt='' /> : ''}
             </div>
 
             <div className="form-group">

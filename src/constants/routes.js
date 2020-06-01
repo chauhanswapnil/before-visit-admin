@@ -6,6 +6,7 @@ export const HOME = '/';
 export const USERS = '/users';
 export const PLACES = '/places';
 export const PLACES_ADD = '/places/add';
+export const PLACES_IMAGES = '/places/images';
 export const CATEGORIES = '/categories';
 export const INTERESTS = '/interests';
 export const REVIEWS = '/reviews';

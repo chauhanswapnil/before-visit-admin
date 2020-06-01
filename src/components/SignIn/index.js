@@ -27,13 +27,13 @@ const SigninPage = () => {
     <div>
       <h1>Log in</h1>
       <form onSubmit={handleLogin}>
-        <label>
+        <label style={{marginLeft:"3rem"}}>
           Email
-          <input name="email" type="email" placeholder="Email" />
+          <input name="email" type="email" placeholder="Email" style={{marginLeft:"0.5rem"}}/>
         </label>
-        <label>
+        <label style={{marginLeft:"3rem"}}>
           Password
-          <input name="password" type="password" placeholder="Password" />
+          <input name="password" type="password" placeholder="Password" style={{marginLeft:"0.5rem"}}/>
         </label>
         <button type="submit">Log in</button>
       </form>

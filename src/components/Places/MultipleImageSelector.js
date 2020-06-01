@@ -10,8 +10,8 @@ const MultipleImageSelector = (props) => {
         for (let i=0; i < e.target.files.length; i++) {
             array.push(URL.createObjectURL(e.target.files[i]));
         }
-        setFileArray(array);
-        props.sendImages(e.target.files);
+        
+        props.sendImages(setFileArray(array));
     }
 
     return (

@@ -79,7 +79,7 @@ const UsersPage = () => {
                 if (interests !== '') {
                     var interests_string = "";
                     interests.forEach((interest) => {
-                        interests_string = interests_string + " " + interest.name;
+                        interests_string = interests_string + " " + interest;
                     });
                 }
                 rows1.push(createData(

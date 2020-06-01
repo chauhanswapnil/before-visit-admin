@@ -18,6 +18,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
+import FirebaseApp from '../Firebase/base';
+
 import Button from '@material-ui/core/Button';
 
 import { withRouter, Link } from "react-router-dom";
@@ -246,8 +248,7 @@ const Navigation = (props) => {
                     <Typography variant="h6">{setTitle()}</Typography>
                     </Grid>
                     <Grid  container justify="flex-end" >
-                        <Button color="inherit" component={Link} className="appbar-link" to={ROUTES.ACCOUNT}>Account</Button>
-                        <Button color="inherit" component={Link} className="appbar-link" >Logout</Button>
+                        <Button color="inherit" component={Link} className="appbar-link" onClick={() => FirebaseApp.auth().signOut()}>Logout</Button>
                     </Grid>
                 </Toolbar>
             </AppBar>
