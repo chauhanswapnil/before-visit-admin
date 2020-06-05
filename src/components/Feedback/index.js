@@ -1,93 +1,114 @@
 import React, { useEffect, useState } from 'react';
 import FirebaseApp from '../Firebase/base';
 import NavigationDrawer from '../Navigation';
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import FeedbackTable from './FeedbackTable';
-
+import { Container, Row, Col } from 'react-bootstrap';
 var db = FirebaseApp.firestore();
 
 const FeedbackPage = () => {
+	const [ isLoading, setLoading ] = useState(true);
+	const [ newFeedbacksToday, setNewFeedbacksToday ] = useState(0);
+	const [ totalFeedbacks, setTotalFeedbacks ] = useState(0);
 
-    const [isLoading, setLoading] = useState(true);
+	useEffect(
+		() => {
+			console.log('In use effect');
+			getData();
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[ isLoading ]
+	);
 
-    useEffect(() => {
-        console.log("In use effect");
-        getData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoading])
-    
+	const columns = [
+		{ id: 'name', label: 'Name', minWidth: 120, align: 'center' },
+		{ id: 'rating', label: 'Rating', minWidth: 120, align: 'center' },
+		{ id: 'review', label: 'Review', minWidth: 120, align: 'center' },
+		{ id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center' },
+		{ id: 'userid', label: 'User ID', minWidth: 120, align: 'center' },
+		{ id: 'docid', label: 'Document ID', minWidth: 120, align: 'center' }
+	];
 
-    const columns = [
-        { id: 'name', label: 'Name', minWidth: 120, align: 'center' },
-        { id: 'rating', label: 'Rating', minWidth: 120, align: 'center' },
-        { id: 'review', label: 'Review', minWidth: 120, align: 'center'  },
-        { id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center'  },
-        { id: 'userid', label: 'User ID', minWidth: 120, align: 'center' },
-        { id: 'docid', label: 'Document ID', minWidth: 120, align: 'center' }
-      ];
-    
-    const [rows, setRows] = useState([]);
+	const [ rows, setRows ] = useState([]);
 
-    function createData( name, rating, review, date_created , userid, docid) {
-        return {name, rating, review, date_created , userid, docid};
-    }
+	function createData(name, rating, review, date_created, userid, docid) {
+		return { name, rating, review, date_created, userid, docid };
+	}
 
-    const getData = () => {
-        var unsubscribe = db.collection("feedback").orderBy("date_created","desc").onSnapshot((querySnapshot) => {
-            handleQuery(querySnapshot);
-        }, (error) => {
-            alert(error);
-        });
+	const getData = () => {
+		var unsubscribe = db.collection('feedback').orderBy('date_created', 'desc').onSnapshot(
+			(querySnapshot) => {
+				handleQuery(querySnapshot);
+			},
+			(error) => {
+				alert(error);
+			}
+		);
 
-        return () => unsubscribe();
-    };
+		return () => unsubscribe();
+	};
 
-    const handleQuery = (querySnapshot) => {
-        setLoading(false);
-            const rows1 = [];
+	const handleQuery = (querySnapshot) => {
+		setLoading(false);
+		const rows1 = [];
+		setTotalFeedbacks(querySnapshot.docs.length);
+		var newFeedbacks = 0;
+		querySnapshot.forEach(function(doc) {
+			var data = doc.data();
+			var name = checkForNullorUndefined(data.name);
+			var rating = checkForNullorUndefined(data.rating);
+			var review = checkForNullorUndefined(data.review);
+			var date_created = checkForNullorUndefined(data.date_created);
+			var userid = checkForNullorUndefined(data.userid);
+			var docid = doc.id;
 
-            querySnapshot.forEach(function(doc) {
+			if (date_created !== '') {
+				var dc_date = doc.data().date_created.toDate().toLocaleDateString('en-IN');
+				console.log(dc_date);
+				var today = new Date().toLocaleDateString('en-IN');
+				if (today === dc_date) {
+					newFeedbacks = newFeedbacks + 1;
+				}
+			}
+			rows1.push(createData(name, rating, review, dc_date, userid, docid));
+		});
+		setNewFeedbacksToday(newFeedbacks);
+		setRows(rows1);
+	};
 
-                var data = doc.data();
-                var name = checkForNullorUndefined(data.name);
-                var rating = checkForNullorUndefined(data.rating); 
-                var review = checkForNullorUndefined(data.review);
-                var date_created = checkForNullorUndefined(data.date_created);
-                var userid = checkForNullorUndefined(data.userid);
-                var docid = doc.id;
+	const checkForNullorUndefined = (value) => {
+		if (value !== undefined && value !== null) {
+			return value;
+		}
+		else {
+			return '';
+		}
+	};
 
-                if (date_created !== '') { 
-                    var dc_date = doc.data().date_created.toDate().toLocaleDateString("en-IN"); 
-                    console.log(dc_date);
-                }
-                rows1.push(createData(
-                    name, 
-                    rating, 
-                    review, 
-                    dc_date,
-                    userid,
-                    docid
-                    ));                
-            });
-            setRows(rows1);
-    }
-
-    const checkForNullorUndefined = (value) => {
-        if(value !== undefined && value !== null) {
-            return value;
-        } else {
-            return '';
-        }
-    }
-
-    return (
-        <NavigationDrawer>
-            <Grid item xs={12}>
-                <FeedbackTable columns={columns} rows={rows}/>
-            </Grid>
-        </NavigationDrawer>
-
-    )
-}
+	return (
+		<NavigationDrawer>
+			<Container>
+				<Row>
+					<Col lg={6} className="text-center">
+						<div className="top-box">
+							<h3>New Feedbacks Today</h3>
+							<h4>{newFeedbacksToday}</h4>
+						</div>
+					</Col>
+					<Col lg={6} className="text-center">
+						<div className="top-box">
+							<h3>Total Feedbacks</h3>
+							<h4>{totalFeedbacks}</h4>
+						</div>
+					</Col>
+				</Row>
+			</Container>
+			<Grid item xs={12}>
+				<FeedbackTable columns={columns} rows={rows} />
+			</Grid>
+		</NavigationDrawer>
+	);
+};
 
 export default FeedbackPage;

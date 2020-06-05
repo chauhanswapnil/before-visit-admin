@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
-import { withRouter, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles({
 	root      : {
@@ -21,10 +21,6 @@ const useStyles = makeStyles({
 });
 
 const PlacesTable = (props) => {
-	const handleClick = (row, column, event) => {
-		console.log('Clicked Row', row, column, event);
-	};
-
 	const { rows, columns, history } = props;
 	const classes = useStyles();
 	const [ page, setPage ] = React.useState(0);
