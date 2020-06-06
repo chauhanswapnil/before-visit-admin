@@ -340,7 +340,7 @@ const AddPlaces = (props) => {
 								<FormControl
 									aria-label="Latitude"
 									aria-describedby="inputGroup-sizing-default"
-									type="number"
+									// type="number"
 									value={latitude}
 									onChange={(e) => setLatitude(e.target.value)}
 								/>
@@ -355,7 +355,7 @@ const AddPlaces = (props) => {
 								<FormControl
 									aria-label="Longitude"
 									aria-describedby="inputGroup-sizing-default"
-									type="number"
+									// type="number"
 									value={longitude}
 									onChange={(e) => setLongitude(e.target.value)}
 								/>

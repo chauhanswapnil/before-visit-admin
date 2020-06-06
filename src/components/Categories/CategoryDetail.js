@@ -145,12 +145,6 @@ const AddCategoryPage = (props) => {
 					props.history.goBack();
 				})
 			} else {
-				var deleteRef = storage.refFromURL(	imageToDelete );
-				deleteRef.delete().then(() => {}).catch(() => {
-					alert('An error occured in deleting the old home image');
-					props.history.goBack();
-				});
-				// There  is a new image 
 				storageRef
 				.child('categories/' + guid())
 				.put(imageToUpload)

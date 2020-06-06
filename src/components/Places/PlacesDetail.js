@@ -452,7 +452,7 @@ const PlacesDetail = (props) => {
 								<FormControl
 									aria-label="Latitude"
 									aria-describedby="inputGroup-sizing-default"
-									type="number"
+									// type="number"
 									value={latitude}
 									onChange={(e) => setLatitude(e.target.value)}
 								/>
@@ -466,7 +466,7 @@ const PlacesDetail = (props) => {
 								</InputGroup.Prepend>
 								<FormControl
 									aria-label="Longitude"
-									type="number"
+									// type="number"
 									aria-describedby="inputGroup-sizing-default"
 									value={longitude}
 									onChange={(e) => setLongitude(e.target.value)}
