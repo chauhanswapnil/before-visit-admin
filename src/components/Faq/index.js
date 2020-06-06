@@ -20,10 +20,10 @@ const FaqPage = (props) => {
     
 
     const columns = [
-        { id: 'question', label: 'Question', minWidth: 120, align: 'center' },
-        { id: 'answer', label: 'Answer', minWidth: 120, align: 'center' },
-        { id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center'  },
-        { id: 'docid', label: 'Document ID', minWidth: 120, align: 'center' }
+        { field: 'question', title: 'Question', minWidth: 120, align: 'center' },
+        { field: 'answer', title: 'Answer', minWidth: 120, align: 'center' },
+        { field: 'date_created', title: 'Date Created', minWidth: 120, align: 'center'  },
+        { field: 'docid', title: 'Document ID', minWidth: 120, align: 'center' }
       ];
     
     const [rows, setRows] = useState([]);

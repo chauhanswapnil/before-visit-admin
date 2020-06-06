@@ -22,12 +22,12 @@ const FeedbackPage = () => {
 	);
 
 	const columns = [
-		{ id: 'name', label: 'Name', minWidth: 120, align: 'center' },
-		{ id: 'rating', label: 'Rating', minWidth: 120, align: 'center' },
-		{ id: 'review', label: 'Review', minWidth: 120, align: 'center' },
-		{ id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center' },
-		{ id: 'userid', label: 'User ID', minWidth: 120, align: 'center' },
-		{ id: 'docid', label: 'Document ID', minWidth: 120, align: 'center' }
+		{ field: 'name', title: 'Name', minWidth: 120, align: 'center' },
+		{ field: 'rating', title: 'Rating', minWidth: 120, align: 'center' },
+		{ field: 'review', title: 'Review', minWidth: 120, align: 'center' },
+		{ field: 'date_created', title: 'Date Created', minWidth: 120, align: 'center' },
+		{ field: 'userid', title: 'User ID', minWidth: 120, align: 'center' },
+		{ field: 'docid', title: 'Document ID', minWidth: 120, align: 'center' }
 	];
 
 	const [ rows, setRows ] = useState([]);

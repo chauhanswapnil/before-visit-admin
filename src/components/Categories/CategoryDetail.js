@@ -9,6 +9,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import * as CONSTANTS from '../../constants/constants';
 
 const db = FirebaseApp.firestore();
+const storage = FirebaseApp.storage();
+var storageRef = storage.ref();
 
 const AddCategoryPage = (props) => {
 	const { history } = props;
@@ -16,6 +18,8 @@ const AddCategoryPage = (props) => {
 	const [ value, setValue ] = React.useState('Yes');
 
 	const [ image_url, setImageUrl ] = React.useState('');
+	const [ imageToUpload, setImageToUpload ] = React.useState(null);
+	const [ imageToDelete, setImageToDelete ] = React.useState('');
 
 	const [ category_name, setCategoryName ] = React.useState('');
 
@@ -24,6 +28,24 @@ const AddCategoryPage = (props) => {
 	const [ isError, setError ] = React.useState(false);
 
 	const [ isDeleting, setDeleting ] = React.useState(false);
+
+	const handleChange = (event) => {
+		setValue(event.target.value);
+	};
+
+	function guid() {
+		function _p8(s) {
+			var p = (Math.random().toString(16) + '000000000').substr(2, 8);
+			return s ? '-' + p.substr(0, 4) + '-' + p.substr(4, 4) : p;
+		}
+		return _p8() + _p8(true) + _p8(true) + _p8();
+	}
+
+	const addImage = (event) => {
+		setImageUrl(URL.createObjectURL(event.target.files[0]));
+		setImageToUpload(event.target.files[0]);
+		console.log('Selected Image', event.target.files[0]);
+	};
 
 	useEffect(
 		() => {
@@ -47,6 +69,7 @@ const AddCategoryPage = (props) => {
 					setValue('No');
 				}
 				setImageUrl(doc.data().icon_url);
+				setImageToDelete(doc.data().icon_url);
 			})
 			.catch(function(error) {
 				setLoading(false);
@@ -102,6 +125,63 @@ const AddCategoryPage = (props) => {
 		}
 	};
 
+	const handleUpdate = () => {
+		if (category_name === '') {
+			alert("Category Name is Required!");
+		} else {
+			var is_home = false;
+				if (value === 'Yes') {
+					is_home = true;
+				}
+			if (typeof image_url === 'string' && image_url.includes('https://')) {
+				//No Change in image upload no image
+				db.collection('categories').doc(props.match.params.id).update({
+					name: category_name,
+					is_home: is_home
+				}).then(() => {
+					props.history.goBack();
+				}).catch((error) => {
+					alert("Error Updating Category");
+					props.history.goBack();
+				})
+			} else {
+				var deleteRef = storage.refFromURL(	imageToDelete );
+				deleteRef.delete().then(() => {}).catch(() => {
+					alert('An error occured in deleting the old home image');
+					props.history.goBack();
+				});
+				// There  is a new image 
+				storageRef
+				.child('categories/' + guid())
+				.put(imageToUpload)
+				.then(function(snapshot) {
+					snapshot.ref
+						.getDownloadURL()
+						.then(function(url) {
+							db.collection('categories').doc(props.match.params.id).update({
+								name: category_name,
+								icon_url: url,
+								is_home: is_home
+							}).then(() => {
+								props.history.goBack();
+							}).catch((error) => {
+								alert("Error Updating Category");
+								props.history.goBack();
+							})
+						})
+						.catch((error) => {
+							alert('Error Uploading Category Image!', error);
+							props.history.goBack();
+						});
+				})
+				.catch((error) => {
+					alert('Error Uploading Image!', error);
+					props.history.goBack();
+				});
+			}
+		}
+	}
+
 	return (
 		<NavigationDrawer>
 			{isDeleting ? (
@@ -117,27 +197,40 @@ const AddCategoryPage = (props) => {
 							<TextField
 								id="outlined-basic"
 								label="Category Name"
-								disabled
 								variant="outlined"
 								placeholder="Ex. Apparel"
 								value={category_name}
+								onChange= {(e) => setCategoryName(e.target.value)}
 							/>
 						</div>
 
 						<div style={{ marginBottom: '2rem' }}>
 							<FormControl component="fieldset">
 								<FormLabel component="legend">On Home Page?</FormLabel>
-								<RadioGroup aria-label="isHome" name="isHome" value={value} disabled>
+								<RadioGroup aria-label="isHome" name="isHome" value={value} onChange={handleChange}>
 									<FormControlLabel value="Yes" control={<Radio />} label="Yes" />
 									<FormControlLabel value="No" control={<Radio />} label="No" />
 								</RadioGroup>
 							</FormControl>
 						</div>
+						<input
+								accept="image/*"
+								id="contained-button-file"
+								type="file"
+								onChange={addImage}
+							/>
+							<br/>
+							<br/>
 						<div style={{ marginBottom: '2rem' }}>
 							<h6>Category Image</h6>
 							<img src={image_url} style={{ backgroundColor: 'black' }} alt="category" />
 						</div>
 						<div>
+						<Button variant="contained" color="primary" onClick={handleUpdate}>
+								Update
+							</Button>
+							<br/>
+							<br/>
 							<Button type="submit" variant="contained" color="secondary">
 								Delete
 							</Button>

@@ -22,23 +22,20 @@ const PlacesPage = (props) => {
 	);
 
 	const columns = [
-		{ id: 'name', label: 'Place Name', minWidth: 120, align: 'center' },
-		{ id: 'visitor_count', label: 'Visitor Count', minWidth: 120, align: 'center' },
-		{ id: 'saved_count', label: 'Saved Count', minWidth: 120, align: 'center' },
-		{ id: 'avg_review', label: 'Average Review', minWidth: 120, align: 'center' },
-		{ id: 'category_id', label: 'Category ID', minWidth: 120, align: 'center' },
-		{ id: 'is_sponsored', label: 'Is Sponsored?', minWidth: 120, align: 'center' },
-		{ id: 'is_offering_promo', label: 'Is Offering Promo?', minWidth: 120, align: 'center' },
-		{ id: 'address', label: 'Address', minWidth: 300, align: 'center' },
-		{ id: 'about_store', label: 'About Store', minWidth: 480, align: 'center' },
-		{ id: 'mobile_no', label: 'Mobile Number', minWidth: 120, align: 'center' },
-		{ id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center' },
-		// { id: 'home_image_url', label: 'Home Image URL', minWidth: 120, align: 'center' },
-		// { id: 'images_url', label: 'Images URL', minWidth: 120, align: 'center' },
-		// { id: 'offer_image_url', label: 'Offer Image URL', minWidth: 120, align: 'center' },
-		{ id: 'search_keywords', label: 'Search Keywords', minWidth: 120, align: 'center' },
-		{ id: 'video_url', label: 'Video URL', minWidth: 120, align: 'center' },
-		{ id: 'doc_id', label: 'Document ID', minWidth: 120, align: 'center' }
+		{ field: 'name', title: 'Place Name'},
+		{ field: 'visitor_count', title: 'Visitor Count'},
+		{ field: 'saved_count', title: 'Saved Count'},
+		{ field: 'avg_review', title: 'Average Review'},
+		{ field: 'category_id', title: 'Category ID'},
+		{ field: 'is_sponsored', title: 'Is Sponsored?'},
+		{ field: 'is_offering_promo', title: 'Is Offering Promo?'},
+		{ field: 'address', title: 'Address', cellStyle: { minWidth: '200px' } , headerStyle: { minWidth: '200px' }},
+		{ field: 'about_store', title: 'About Store', cellStyle: { minWidth: '200px' } , headerStyle: { minWidth: '200px' }},
+		{ field: 'mobile_no', title: 'Mobile Number'},
+		{ field: 'date_created', title: 'Date Created'},
+		{ field: 'search_keywords', title: 'Search Keywords', cellStyle: { minWidth: '200px' } , headerStyle: { minWidth: '200px' }},
+		{ field: 'video_url', title: 'Video URL'},
+		{ field: 'doc_id', title: 'Document ID'}
 	];
 
 	const [ rows, setRows ] = useState([]);

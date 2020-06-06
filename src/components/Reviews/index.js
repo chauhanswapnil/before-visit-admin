@@ -23,20 +23,29 @@ const ReviewsPage = () => {
 	);
 
 	const columns = [
-		{ id: 'place_name', label: 'Place Name', minWidth: 120, align: 'center' },
-		{ id: 'review', label: 'Review', minWidth: 120, align: 'center' },
-		{ id: 'rating', label: 'Rating', minWidth: 120, align: 'center' },
-		{ id: 'user_name', label: 'User', minWidth: 120, align: 'center' },
-		{ id: 'userid', label: 'User ID', minWidth: 120, align: 'center' },
-		{ id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center' },
-		{ id: 'place_id', label: 'Place ID', minWidth: 120, align: 'center' },
-		{ id: 'docid', label: 'Document ID', minWidth: 120, align: 'center' }
+		// { id: 'place_name', label: 'Place Name', minWidth: 120, align: 'center' },
+		// { id: 'review', label: 'Review', minWidth: 120, align: 'center' },
+		// { id: 'rating', label: 'Rating', minWidth: 120, align: 'center' },
+		// { id: 'user_name', label: 'User', minWidth: 120, align: 'center' },
+		// { id: 'userid', label: 'User ID', minWidth: 120, align: 'center' },
+		// { id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center' },
+		// { id: 'place_id', label: 'Place ID', minWidth: 120, align: 'center' },
+		// { id: 'docid', label: 'Document ID', minWidth: 120, align: 'center' }
+
+		{ field: 'place_name', title: 'Place Name', minWidth: 120, align: 'center' },
+		{ field: 'review', title: 'Review', minWidth: 120, align: 'center' },
+		{ field: 'rating', title: 'Rating', minWidth: 120, align: 'center' },
+		{ field: 'user_name', title: 'User', minWidth: 120, align: 'center' },
+		{ field: 'userid', title: 'User ID', minWidth: 120, align: 'center' },
+		{ field: 'date_created', title: 'Date Created', minWidth: 120, align: 'center' },
+		{ field: 'place_id', title: 'Place ID', minWidth: 120, align: 'center' },
+		{ field: 'docid', title: 'Document ID', minWidth: 120, align: 'center' }
 	];
 
 	const [ rows, setRows ] = useState([]);
 
-	function createData(place_name, review, rating, user_name, user_id, date_created, place_id, docid) {
-		return { place_name, review, rating, user_name, user_id, date_created, place_id, docid };
+	function createData(place_name, review, rating, user_name, userid, date_created, place_id, docid) {
+		return { place_name, review, rating, user_name, userid, date_created, place_id, docid };
 	}
 
 	const getData = () => {

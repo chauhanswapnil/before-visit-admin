@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const AddCategoryPage = () => {
+const AddCategoryPage = (props) => {
 	const classes = useStyles();
 
 	const [ value, setValue ] = React.useState('Yes');
@@ -82,10 +82,12 @@ const AddCategoryPage = () => {
 									.then(function() {
 										setLoading(false);
 										alert('Successfully Added!');
+										props.history.goBack();
 									})
 									.catch(function(error) {
 										setLoading(false);
 										alert('Error Adding document: ', error);
+										props.history.goBack();
 									});
 							});
 						})
@@ -106,10 +108,12 @@ const AddCategoryPage = () => {
 						.then(function() {
 							setLoading(false);
 							alert('Successfully Added!');
+							props.history.goBack();
 						})
 						.catch(function(error) {
 							setLoading(false);
 							alert('Error Adding document: ', error);
+							props.history.goBack();
 						});
 				}
 			}

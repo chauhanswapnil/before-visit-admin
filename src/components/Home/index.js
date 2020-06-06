@@ -22,19 +22,20 @@ const HomePage = () => {
     }, [])
 
     const columns = [
-        { id: 'name', label: 'Name', minWidth: 120, align: 'center' },
-        { id: 'email', label: 'Email', minWidth: 120, align: 'center'  },
-        { id: 'mobile', label: 'Phone', minWidth: 120 , align: 'center' },
-        { id: 'gender', label: 'Gender', minWidth: 120 , align: 'center' },
-        { id: 'interests', label: 'Interests', minWidth: 120 , align: 'center' },
-        { id: 'dob', label: 'Date of Birth', minWidth: 120 , align: 'center' },
-        { id: 'address', label: 'Address', minWidth: 120, align: 'center'  },
-        { id: 'notifpref', label: 'Notification Pref', minWidth: 120 , align: 'center' },
-        { id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center'  }
+        { field: 'userid', title: 'User ID', minWidth: 120, align: 'center' },
+        { field: 'name', title: 'Name', minWidth: 120, align: 'center' },
+        { field: 'email', title: 'Email', minWidth: 120, align: 'center'  },
+        { field: 'mobile', title: 'Phone', minWidth: 120 , align: 'center' },
+        { field: 'gender', title: 'Gender', minWidth: 120 , align: 'center' },
+        { field: 'interests', title: 'Interests', cellStyle: { minWidth: '200px' } , headerStyle: { minWidth: '200px' }},
+        { field: 'dob', title: 'Date of Birth', minWidth: 120 , align: 'center' },
+        { field: 'address', title: 'Address', minWidth: 120, align: 'center'  },
+        { field: 'notifpref', title: 'Notification Pref', minWidth: 120 , align: 'center' },
+        { field: 'date_created', title: 'Date Created', minWidth: 120, align: 'center'  }
       ];
 
-    function createData(name, email, mobile, gender, interests, dob, address, notifpref, date_created) {
-        return { name, email, mobile, gender, interests, dob, address, notifpref, date_created };
+    function createData(userid, name, email, mobile, gender, interests, dob, address, notifpref, date_created) {
+        return {userid, name, email, mobile, gender, interests, dob, address, notifpref, date_created };
     }
 
     const getData = () => {
@@ -53,6 +54,7 @@ const HomePage = () => {
 
             querySnapshot.forEach(function(doc) {
                 var data = doc.data();
+                var userid = doc.id;
                 var name = checkForNullorUndefined(data.name);
                 var email = checkForNullorUndefined(data.email);
                 var mobile_no = checkForNullorUndefined(data.mobile_no);
@@ -77,6 +79,7 @@ const HomePage = () => {
                     if (today === dc_date) {
                         today_users_count = today_users_count + 1;
                         rows1.push(createData(
+                            userid,
                             name,
                             email,
                             mobile_no,

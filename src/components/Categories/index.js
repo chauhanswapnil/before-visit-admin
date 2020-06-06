@@ -7,6 +7,7 @@ import * as ROUTES from '../../constants/routes';
 import * as CONSTANTS from '../../constants/constants';
 import CategoryTable from './CategoryTable';
 
+import {withRouter} from 'react-router-dom';
 
 var db = FirebaseApp.firestore();
 
@@ -22,11 +23,11 @@ const CategoriesPage = (props) => {
     
 
     const columns = [
-        { id: 'name', label: 'Interest', minWidth: 120, align: 'center' },
-        { id: 'is_home', label: 'Is Home?', minWidth: 120, align: 'center' },
-        { id: 'icon_url', label: 'Icon', minWidth: 120, align: 'center' },
-        { id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center'  },
-        { id: 'doc_id', label: 'Document ID', minWidth: 120, align: 'center' }
+        { field: 'name', title: 'Category Name', minWidth: 120, align: 'center' },
+        { field: 'is_home', title: 'Is Home?', minWidth: 120, align: 'center' },
+        { field: 'icon_url', title: 'Icon', minWidth: 120, align: 'center' },
+        { field: 'date_created', title: 'Date Created', minWidth: 120, align: 'center'  },
+        { field: 'doc_id', title: 'Document ID', minWidth: 120, align: 'center' }
       ];
     
     const [rows, setRows] = useState([]);
@@ -99,4 +100,4 @@ const CategoriesPage = (props) => {
     )
 }
 
-export default CategoriesPage;
+export default withRouter(CategoriesPage);

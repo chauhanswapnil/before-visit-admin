@@ -22,17 +22,19 @@ const IssuesPage = () => {
 	);
 
 	const columns = [
-		{ id: 'name', label: 'Name', minWidth: 120, align: 'center' },
-		{ id: 'description', label: 'Description', minWidth: 120, align: 'center' },
-		{ id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center' },
-		{ id: 'userid', label: 'User ID', minWidth: 120, align: 'center' },
-		{ id: 'docid', label: 'Document ID', minWidth: 120, align: 'center' }
+		{ field: 'name', title: 'Name'},
+		{ field: 'description', title: 'Description'},
+		{ field: 'date_created', title: 'Date Created'},
+		{ field: 'is_hidden', title: 'Is Solved?'},
+		{ field: 'userid', title: 'User ID'},
+		{ field: 'docid', title: 'Document ID'}
 	];
 
-	const [ rows, setRows ] = useState([]);
+	const [ rowsUnsolved, setRowsUnsolved ] = useState([]);
+	const [ rowsSolved, setRowsSolved ] = useState([]);
 
-	function createData(name, description, date_created, userid, docid) {
-		return { name, description, date_created, userid, docid };
+	function createData(name, description, date_created, is_hidden, userid, docid) {
+		return { name, description, date_created, is_hidden, userid, docid };
 	}
 
 	const getData = () => {
@@ -50,7 +52,8 @@ const IssuesPage = () => {
 
 	const handleQuery = (querySnapshot) => {
 		setLoading(false);
-		const rows1 = [];
+		const rows1 = []; //Unsolved
+		const rows2 = []; //Solved
 		setTotalIssues(querySnapshot.docs.length);
 		var newIssues = 0;
 		querySnapshot.forEach(function(doc) {
@@ -60,6 +63,7 @@ const IssuesPage = () => {
 			var userid = checkForNullorUndefined(data.userid);
 			var description = checkForNullorUndefined(data.description);
 			var doc_id = doc.id;
+			var is_hidden = data.is_hidden;
 
 			if (date_created !== '') {
 				var dc_date = doc.data().date_created.toDate().toLocaleDateString('en-IN');
@@ -69,10 +73,15 @@ const IssuesPage = () => {
 					newIssues = newIssues + 1;
 				}
 			}
-			rows1.push(createData(name, description, dc_date, userid, doc_id));
+			if(is_hidden) {
+				rows2.push(createData(name, description, dc_date, is_hidden, userid, doc_id));
+			} else {
+				rows1.push(createData(name, description, dc_date, is_hidden ,userid, doc_id));
+			}
 		});
 		setNewIssuesToday(newIssues);
-		setRows(rows1);
+		setRowsSolved(rows2);
+		setRowsUnsolved(rows1);
 	};
 
 	const checkForNullorUndefined = (value) => {
@@ -103,7 +112,13 @@ const IssuesPage = () => {
 				</Row>
 			</Container>
 			<Grid item xs={12}>
-				<IssuesTable columns={columns} rows={rows} />
+				<IssuesTable columns={columns} rows={rowsUnsolved} title="Unsolved Issues"/>
+			</Grid>
+			<br/>
+			<br/>
+			<br/>
+			<Grid item xs={12}>
+				<IssuesTable columns={columns} rows={rowsSolved} title="Solved Issues"/>
 			</Grid>
 		</NavigationDrawer>
 	);

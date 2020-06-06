@@ -27,9 +27,9 @@ const InterestsPage = () => {
 	);
 
 	const columns = [
-		{ id: 'name', label: 'Interest', minWidth: 120, align: 'center' },
-		{ id: 'date_created', label: 'Date Created', minWidth: 120, align: 'center' },
-		{ id: 'doc_id', label: 'Document ID', minWidth: 120, align: 'center' }
+		{ field: 'name', title: 'Interest', minWidth: 120, align: 'center' },
+		{ field: 'date_created', title: 'Date Created', minWidth: 120, align: 'center' },
+		{ field: 'doc_id', title: 'Document ID', minWidth: 120, align: 'center' }
 	];
 
 	const [ rows, setRows ] = useState([]);
