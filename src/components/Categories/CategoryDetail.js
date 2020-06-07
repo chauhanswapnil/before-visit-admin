@@ -126,6 +126,8 @@ const AddCategoryPage = (props) => {
 	};
 
 	const handleUpdate = () => {
+		console.log("IN HANDLE UPDATE");
+		console.log(image_url);
 		if (category_name === '') {
 			alert("Category Name is Required!");
 		} else {
@@ -133,18 +135,9 @@ const AddCategoryPage = (props) => {
 				if (value === 'Yes') {
 					is_home = true;
 				}
-			if (typeof image_url === 'string' && image_url.includes('https://')) {
-				//No Change in image upload no image
-				db.collection('categories').doc(props.match.params.id).update({
-					name: category_name,
-					is_home: is_home
-				}).then(() => {
-					props.history.goBack();
-				}).catch((error) => {
-					alert("Error Updating Category");
-					props.history.goBack();
-				})
-			} else {
+			if (typeof image_url === 'string' && image_url.includes('blob')) {
+				console.log("IMAGE TO UPLOAD");
+				console.log(imageToUpload);
 				storageRef
 				.child('categories/' + guid())
 				.put(imageToUpload)
@@ -157,6 +150,7 @@ const AddCategoryPage = (props) => {
 								icon_url: url,
 								is_home: is_home
 							}).then(() => {
+								alert("Successfully Updated");
 								props.history.goBack();
 							}).catch((error) => {
 								alert("Error Updating Category");
@@ -172,6 +166,19 @@ const AddCategoryPage = (props) => {
 					alert('Error Uploading Image!', error);
 					props.history.goBack();
 				});
+			} else {
+				//No Change in image upload no image
+				console.log("IN NO IMAGE TO UPLOAD");
+				console.log(image_url);
+				db.collection('categories').doc(props.match.params.id).update({
+					name: category_name,
+					is_home: is_home
+				}).then(() => {
+					props.history.goBack();
+				}).catch((error) => {
+					alert("Error Updating Category");
+					props.history.goBack();
+				})
 			}
 		}
 	}

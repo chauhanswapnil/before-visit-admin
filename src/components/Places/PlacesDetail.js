@@ -219,7 +219,7 @@ const PlacesDetail = (props) => {
 	};
 
 	const addPromotionalImage = () => {
-		if (typeof homeImage === 'string' && homeImage.includes('https://')) {
+		if (typeof homeImage === 'string' && !homeImage.includes('blob')) {
 		}
 		else {
 			var deleteRef = storage.refFromURL(homeImageDelete);
@@ -270,7 +270,7 @@ const PlacesDetail = (props) => {
 		}
 		else {
 			console.log('Promo imageee', promotionalImage);
-			if (typeof promotionalImage === 'string' && promotionalImage.includes('https://')) {
+			if (typeof promotionalImage === 'string' && !promotionalImage.includes('blob')) {
 				// Just Update other things
 				updateData(promoImageDelete);
 			}
