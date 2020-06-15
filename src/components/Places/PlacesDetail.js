@@ -50,6 +50,8 @@ const PlacesDetail = (props) => {
 	const [ promoImageDelete, setPromoImageDelete ] = useState('');
 	const [ homeImageDelete, setHomeImageDelete ] = useState('');
 
+	const [ locationUrl, setLocationUrl ] = useState('');
+
 	useEffect(() => {
 		console.log('In use effect');
 		getData();
@@ -83,6 +85,7 @@ const PlacesDetail = (props) => {
 				setLongitude(data.longitude);
 				setLatitude(data.latitude);
 				setPlaceImages(data.images_url);
+				setLocationUrl(data.location_url);
 
 				var unsubscribe = db.collection(CONSTANTS.CATEGORIES).onSnapshot(
 					(querySnapshot) => {
@@ -157,8 +160,7 @@ const PlacesDetail = (props) => {
 							}
 							if (check === 0) {
 								alert('Mobile Number is invalid');
-							}
-							else {
+							} else {
 								if (about !== null && about !== undefined && about !== '') {
 									if (
 										category !== null &&
@@ -179,49 +181,39 @@ const PlacesDetail = (props) => {
 												}
 												// UPDATE DATA HERE
 												addPromotionalImage();
-											}
-											else {
+											} else {
 												alert('Home Image is required');
 											}
-										}
-										else {
+										} else {
 											alert('Please add a few keywords for better user experience');
 										}
-									}
-									else {
+									} else {
 										alert('Please select a category');
 									}
-								}
-								else {
+								} else {
 									alert('About Places Cannot be empty');
 								}
 							}
-						}
-						else {
+						} else {
 							alert('At least one mobile number is required');
 						}
-					}
-					else {
+					} else {
 						alert('Address cant be empty');
 					}
-				}
-				else {
+				} else {
 					alert('Place Name cant be empty');
 				}
-			}
-			else {
+			} else {
 				alert('Longitude is not valid');
 			}
-		}
-		else {
+		} else {
 			alert('Latitude is not valid');
 		}
 	};
 
 	const addPromotionalImage = () => {
 		if (typeof homeImage === 'string' && !homeImage.includes('blob')) {
-		}
-		else {
+		} else {
 			var deleteRef = storage.refFromURL(homeImageDelete);
 			deleteRef.delete().then(() => {}).catch(() => {
 				alert('An error occured in deleting the old home image');
@@ -267,14 +259,12 @@ const PlacesDetail = (props) => {
 				});
 			}
 			updateData('');
-		}
-		else {
+		} else {
 			console.log('Promo imageee', promotionalImage);
 			if (typeof promotionalImage === 'string' && !promotionalImage.includes('blob')) {
 				// Just Update other things
 				updateData(promoImageDelete);
-			}
-			else {
+			} else {
 				//Delete image if it existed and set offer_image_url to new image url
 				if (promoImageDelete !== '') {
 					var deleteRef2 = storage.refFromURL(promoImageDelete);
@@ -323,7 +313,8 @@ const PlacesDetail = (props) => {
 				is_offering_promo : isOfferingPromo,
 				offer_image_url   : promo_url,
 				latitude          : parseFloat(latitude),
-				longitude         : parseFloat(longitude)
+				longitude         : parseFloat(longitude),
+				location_url      : locationUrl
 			})
 			.then(function() {
 				setLoading(false);
@@ -340,31 +331,36 @@ const PlacesDetail = (props) => {
 	const deletePlace = () => {
 		if (window.confirm(`Are you sure you want to delete the place?`)) {
 			var deleteHome = storage.refFromURL(homeImageDelete);
-			deleteHome.delete().then().catch(() => { 
+			deleteHome.delete().then().catch(() => {
 				alert('An error occured in deleting the file');
 				props.history.goBack();
 			});
 			if (promoImageDelete !== '') {
 				var deletePromo = storage.refFromURL(promoImageDelete);
-			deletePromo.delete().then().catch(() => { 
-				alert('An error occured in deleting the file');
-				props.history.goBack();
-			});
-			}
-			for (let i=0; i<placeImages.length; i++) {
-				var deletePlace = storage.refFromURL(placeImages[i]);
-				deletePlace.delete().then().catch(() => { 
+				deletePromo.delete().then().catch(() => {
 					alert('An error occured in deleting the file');
 					props.history.goBack();
 				});
 			}
-			db.collection("places").doc(props.match.params.id).delete().then(function() {
-				alert("Deleted Successfully!");
-				props.history.goBack();
-			}).catch((error) => {
-				alert("Error Deleting Place!", error);
-				props.history.goBack();
-			})
+			for (let i = 0; i < placeImages.length; i++) {
+				var deletePlace = storage.refFromURL(placeImages[i]);
+				deletePlace.delete().then().catch(() => {
+					alert('An error occured in deleting the file');
+					props.history.goBack();
+				});
+			}
+			db
+				.collection('places')
+				.doc(props.match.params.id)
+				.delete()
+				.then(function() {
+					alert('Deleted Successfully!');
+					props.history.goBack();
+				})
+				.catch((error) => {
+					alert('Error Deleting Place!', error);
+					props.history.goBack();
+				});
 		}
 	};
 	return (
@@ -473,6 +469,21 @@ const PlacesDetail = (props) => {
 								/>
 							</InputGroup>
 							<p>You can easily get Latitude and Longitude from Google Maps!</p>
+
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text className="bgblue" id="inputGroup-sizing-default">
+										Location Url (Google Maps URL)
+									</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl
+									aria-label="Location URL"
+									aria-describedby="inputGroup-sizing-default"
+									value={locationUrl}
+									onChange={(e) => setLocationUrl(e.target.value)}
+								/>
+							</InputGroup>
+
 							<InputGroup className="mb-3">
 								<InputGroup.Prepend>
 									<InputGroup.Text className="bgblue" id="inputGroup-sizing-default">
@@ -586,7 +597,7 @@ const PlacesDetail = (props) => {
 							<Button variant="primary" className="u-margin-med" type="submit">
 								Update Place
 							</Button>
-							<br/>
+							<br />
 							<Button variant="danger" className="u-margin-med" onClick={deletePlace}>
 								Delete Place
 							</Button>

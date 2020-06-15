@@ -22,20 +22,31 @@ const PlacesPage = (props) => {
 	);
 
 	const columns = [
-		{ field: 'name', title: 'Place Name'},
-		{ field: 'visitor_count', title: 'Visitor Count'},
-		{ field: 'saved_count', title: 'Saved Count'},
-		{ field: 'avg_review', title: 'Average Review'},
-		{ field: 'category_id', title: 'Category ID'},
-		{ field: 'is_sponsored', title: 'Is Sponsored?'},
-		{ field: 'is_offering_promo', title: 'Is Offering Promo?'},
-		{ field: 'address', title: 'Address', cellStyle: { minWidth: '200px' } , headerStyle: { minWidth: '200px' }},
-		{ field: 'about_store', title: 'About Store', cellStyle: { minWidth: '200px' } , headerStyle: { minWidth: '200px' }},
-		{ field: 'mobile_no', title: 'Mobile Number'},
-		{ field: 'date_created', title: 'Date Created'},
-		{ field: 'search_keywords', title: 'Search Keywords', cellStyle: { minWidth: '200px' } , headerStyle: { minWidth: '200px' }},
-		{ field: 'video_url', title: 'Video URL'},
-		{ field: 'doc_id', title: 'Document ID'}
+		{ field: 'name', title: 'Place Name' },
+		{ field: 'visitor_count', title: 'Visitor Count' },
+		{ field: 'saved_count', title: 'Saved Count' },
+		{ field: 'avg_review', title: 'Average Review' },
+		{ field: 'category_id', title: 'Category ID' },
+		{ field: 'is_sponsored', title: 'Is Sponsored?' },
+		{ field: 'is_offering_promo', title: 'Is Offering Promo?' },
+		{ field: 'address', title: 'Address', cellStyle: { minWidth: '200px' }, headerStyle: { minWidth: '200px' } },
+		{
+			field: 'about_store',
+			title: 'About Store',
+			cellStyle: { minWidth: '200px' },
+			headerStyle: { minWidth: '200px' }
+		},
+		{ field: 'mobile_no', title: 'Mobile Number' },
+		{ field: 'date_created', title: 'Date Created' },
+		{
+			field: 'search_keywords',
+			title: 'Search Keywords',
+			cellStyle: { minWidth: '200px' },
+			headerStyle: { minWidth: '200px' }
+		},
+		{ field: 'video_url', title: 'Video URL' },
+		{ field: 'location_url', title: 'Location URL' },
+		{ field: 'doc_id', title: 'Document ID' }
 	];
 
 	const [ rows, setRows ] = useState([]);
@@ -54,6 +65,7 @@ const PlacesPage = (props) => {
 		date_created,
 		search_keywords,
 		video_url,
+		location_url,
 		doc_id
 	) {
 		return {
@@ -70,6 +82,7 @@ const PlacesPage = (props) => {
 			date_created,
 			search_keywords,
 			video_url,
+			location_url,
 			doc_id
 		};
 	}
@@ -109,6 +122,8 @@ const PlacesPage = (props) => {
 			// var offer_image_url = checkForNullorUndefined(data.offer_image_url);
 			var search_keywords = checkForNullorUndefined(data.search_keywords);
 			var video_url = checkForNullorUndefined(data.video_url);
+			var location_url = checkForNullorUndefined(data.location_url);
+
 			var doc_id = doc.id;
 
 			if (visitor_count === '') {
@@ -150,6 +165,7 @@ const PlacesPage = (props) => {
 					// offer_image_url,
 					search_keywords.toString(),
 					video_url,
+					location_url,
 					doc_id
 				)
 			);
@@ -160,8 +176,7 @@ const PlacesPage = (props) => {
 	const checkForNullorUndefined = (value) => {
 		if (value !== undefined && value !== null) {
 			return value;
-		}
-		else {
+		} else {
 			return '';
 		}
 	};

@@ -37,6 +37,7 @@ const AddPlaces = (props) => {
 
 	const [ loadingCategories, setLoadingCategories ] = useState(true);
 
+	const [ locationUrl, setLocationUrl ] = useState('');
 	// const [ show, setShow ] = useState(true);
 
 	const [ cats, setCats ] = useState([]);
@@ -187,8 +188,9 @@ const AddPlaces = (props) => {
 						storageRef
 							.child('places/' + guid())
 							.put(placeImages[i])
-							.then(function(snapshot) // eslint-disable-line no-loop-func
-							{
+							.then(function(
+								snapshot // eslint-disable-line no-loop-func
+							) {
 								snapshot.ref.getDownloadURL().then(function(downloadURL) {
 									uploadedCount = uploadedCount + 1;
 									urls.push(downloadURL);
@@ -250,7 +252,8 @@ const AddPlaces = (props) => {
 				is_offering_promo : isOfferingPromo,
 				offer_image_url   : promo_url,
 				latitude          : parseFloat(latitude),
-				longitude         : parseFloat(longitude)
+				longitude         : parseFloat(longitude),
+				location_url      : locationUrl
 			})
 			.then(function() {
 				setLoading(false);
@@ -358,6 +361,20 @@ const AddPlaces = (props) => {
 									// type="number"
 									value={longitude}
 									onChange={(e) => setLongitude(e.target.value)}
+								/>
+							</InputGroup>
+							<p>You can easily get Latitude and Longitude from Google Maps!</p>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<InputGroup.Text className="bgblue" id="inputGroup-sizing-default">
+										Location Url (Google Maps URL)
+									</InputGroup.Text>
+								</InputGroup.Prepend>
+								<FormControl
+									aria-label="Location URL"
+									aria-describedby="inputGroup-sizing-default"
+									value={locationUrl}
+									onChange={(e) => setLocationUrl(e.target.value)}
 								/>
 							</InputGroup>
 
