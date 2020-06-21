@@ -330,6 +330,19 @@ const PlacesDetail = (props) => {
 
 	const deletePlace = () => {
 		if (window.confirm(`Are you sure you want to delete the place?`)) {
+			db
+				.collection('places')
+				.doc(props.match.params.id)
+				.delete()
+				.then(function() {
+					alert('Deleted Successfully!');
+					props.history.goBack();
+				})
+				.catch((error) => {
+					alert('Error Deleting Place!', error);
+					props.history.goBack();
+				});
+
 			var deleteHome = storage.refFromURL(homeImageDelete);
 			deleteHome.delete().then().catch(() => {
 				alert('An error occured in deleting the file');
@@ -349,18 +362,6 @@ const PlacesDetail = (props) => {
 					props.history.goBack();
 				});
 			}
-			db
-				.collection('places')
-				.doc(props.match.params.id)
-				.delete()
-				.then(function() {
-					alert('Deleted Successfully!');
-					props.history.goBack();
-				})
-				.catch((error) => {
-					alert('Error Deleting Place!', error);
-					props.history.goBack();
-				});
 		}
 	};
 	return (
