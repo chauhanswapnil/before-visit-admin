@@ -10,6 +10,12 @@ import FirebaseApp from '../Firebase/base';
 
 import { Link } from 'react-router-dom';
 
+import imageCompression from 'browser-image-compression';
+
+const options = {
+	maxSizeMB : 0.5 // (default: Number.POSITIVE_INFINITY)
+};
+
 var db = FirebaseApp.firestore();
 const storage = FirebaseApp.storage();
 var storageRef = storage.ref();
@@ -211,7 +217,7 @@ const PlacesDetail = (props) => {
 		}
 	};
 
-	const addPromotionalImage = () => {
+	const addPromotionalImage = async () => {
 		if (typeof homeImage === 'string' && !homeImage.includes('blob')) {
 		} else {
 			var deleteRef = storage.refFromURL(homeImageDelete);
@@ -220,9 +226,11 @@ const PlacesDetail = (props) => {
 				props.history.goBack();
 			});
 
+			const compressedHomeImage = await imageCompression(homeImage, options);
+
 			storageRef
 				.child('places/' + guid())
-				.put(homeImage)
+				.put(compressedHomeImage)
 				.then(function(snapshot) {
 					snapshot.ref
 						.getDownloadURL()
@@ -273,9 +281,12 @@ const PlacesDetail = (props) => {
 						props.history.goBack();
 					});
 				}
+
+				const compressedPromoImage = await imageCompression(promotionalImage, options);
+
 				storageRef
 					.child('places/' + guid())
-					.put(promotionalImage)
+					.put(compressedPromoImage)
 					.then(function(snapshot) {
 						snapshot.ref
 							.getDownloadURL()

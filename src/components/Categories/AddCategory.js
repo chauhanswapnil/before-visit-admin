@@ -9,9 +9,15 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import * as CONSTANTS from '../../constants/constants';
 
+import imageCompression from 'browser-image-compression';
+
 const db = FirebaseApp.firestore();
 const storage = FirebaseApp.storage();
 var storageRef = storage.ref();
+
+const options = {
+	maxSizeMB : 0.4 // (default: Number.POSITIVE_INFINITY)
+};
 
 const useStyles = makeStyles((theme) => ({
 	root  : {
@@ -52,23 +58,25 @@ const AddCategoryPage = (props) => {
 		return _p8() + _p8(true) + _p8(true) + _p8();
 	}
 
-	const handleFormSubmit = (event) => {
+	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 
 		if (category_name !== '') {
 			if (image === null && image_url === '') {
 				alert('Either image or image url is required..!');
-			}
-			else {
+			} else {
 				setLoading(true);
 				var is_home = false;
 				if (value === 'Yes') {
 					is_home = true;
 				}
 				if (image !== null) {
+					const compressedFile = await imageCompression(image, options);
+					console.log(compressedFile.size);
+
 					storageRef
 						.child('categories/' + guid())
-						.put(image)
+						.put(compressedFile)
 						.then(function(snapshot) {
 							snapshot.ref.getDownloadURL().then(function(downloadURL) {
 								var docref = db.collection(CONSTANTS.CATEGORIES).doc();
@@ -95,8 +103,7 @@ const AddCategoryPage = (props) => {
 							setLoading(false);
 							alert('Error Uploading Image!', error);
 						});
-				}
-				else {
+				} else {
 					var docref = db.collection(CONSTANTS.CATEGORIES).doc();
 					docref
 						.set({
@@ -117,8 +124,7 @@ const AddCategoryPage = (props) => {
 						});
 				}
 			}
-		}
-		else {
+		} else {
 			alert('Category Name Required..!');
 		}
 	};

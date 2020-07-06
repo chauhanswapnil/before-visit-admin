@@ -5,6 +5,11 @@ import FirebaseApp from '../Firebase/base';
 
 import * as firebase from 'firebase/app';
 
+import imageCompression from 'browser-image-compression';
+const options = {
+	maxSizeMB : 0.5 // (default: Number.POSITIVE_INFINITY)
+};
+
 var db = FirebaseApp.firestore();
 const storage = FirebaseApp.storage();
 var storageRef = storage.ref();
@@ -80,17 +85,24 @@ const ImageGallery = (props) => {
 		return _p8() + _p8(true) + _p8(true) + _p8();
 	}
 
-	const uploadImages = () => {
+	const uploadImages = async () => {
 		if (window.confirm(`The selected images will be uploaded.! Continue ?`)) {
 			var urls = [];
 			setUploading(true);
 			var uploadedCount = 0;
+
+			const placeImagesCompressed = [];
 			for (let i = 0; i < imagesUpload.length; i++) {
+				placeImagesCompressed.push(await imageCompression(imagesUpload[i], options));
+			}
+
+			for (let i = 0; i < placeImagesCompressed.length; i++) {
 				storageRef
 					.child('places/' + guid())
-					.put(imagesUpload[i])
-					.then(function(snapshot) // eslint-disable-line no-loop-func
-					{
+					.put(placeImagesCompressed[i])
+					.then(function(
+						snapshot // eslint-disable-line no-loop-func
+					) {
 						snapshot.ref.getDownloadURL().then(function(downloadURL) {
 							uploadedCount = uploadedCount + 1;
 							urls.push(downloadURL);

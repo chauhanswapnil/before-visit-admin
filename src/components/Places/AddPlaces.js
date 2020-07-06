@@ -9,6 +9,11 @@ import * as CONSTANTS from '../../constants/constants';
 import NavigationDrawer from '../Navigation';
 import FirebaseApp from '../Firebase/base';
 
+import imageCompression from 'browser-image-compression';
+const options = {
+	maxSizeMB : 0.5 // (default: Number.POSITIVE_INFINITY)
+};
+
 var db = FirebaseApp.firestore();
 const storage = FirebaseApp.storage();
 var storageRef = storage.ref();
@@ -99,8 +104,12 @@ const AddPlaces = (props) => {
 		return _p8() + _p8(true) + _p8(true) + _p8();
 	}
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		const compressedHomeImage = await imageCompression(homeImage, options);
+		console.log(compressedHomeImage.size);
+
 		if (parseFloat(latitude)) {
 			if (parseFloat(longitude)) {
 				if (name !== null && name !== undefined && name !== '') {
@@ -174,34 +183,44 @@ const AddPlaces = (props) => {
 		}
 	};
 
-	const addImages = () => {
+	const addImages = async () => {
 		var urls = [];
 		setLoading(true);
 
+		const compressedHomeImage = await imageCompression(homeImage, options);
+		console.log(compressedHomeImage.size);
+		const placeImagesCompressed = [];
+		for (let i = 0; i < placeImages.length; i++) {
+			placeImagesCompressed.push(await imageCompression(placeImages[i], options));
+		}
+		var promoImageCompressed;
+		if (isOfferingPromo === true) {
+			promoImageCompressed = await imageCompression(promotionalImage, options);
+		}
 		storageRef
 			.child('places/' + guid())
-			.put(homeImage)
+			.put(compressedHomeImage)
 			.then(function(snapshot) {
 				snapshot.ref.getDownloadURL().then(function(homeURL) {
 					var uploadedCount = 0;
-					for (let i = 0; i < placeImages.length; i++) {
+					for (let i = 0; i < placeImagesCompressed.length; i++) {
 						storageRef
 							.child('places/' + guid())
-							.put(placeImages[i])
+							.put(placeImagesCompressed[i])
 							.then(function(
 								snapshot // eslint-disable-line no-loop-func
 							) {
 								snapshot.ref.getDownloadURL().then(function(downloadURL) {
 									uploadedCount = uploadedCount + 1;
 									urls.push(downloadURL);
-									if (uploadedCount === placeImages.length) {
+									if (uploadedCount === placeImagesCompressed.length) {
 										if (isOfferingPromo === false) {
 											// Upload without promo image
 											addData(homeURL, urls, '');
 										} else {
 											storageRef
 												.child('places/' + guid())
-												.put(promotionalImage)
+												.put(promoImageCompressed)
 												.then(function(snapshot) {
 													snapshot.ref
 														.getDownloadURL()
